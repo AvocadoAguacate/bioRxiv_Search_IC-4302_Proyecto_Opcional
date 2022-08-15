@@ -40,6 +40,16 @@
 
 El proyecto *bioRxiv Search* pretende implementar dos motores de búsqueda de artículos científicos de Covid19, uno en una base de datos NoSQL llamada Elasticsearch y otro en una base de datos relacional llamada MySQL, para este propósito utilizaremos un repositorio de descripciones de artículos científicos llamada bioRxiv, el cual al día 25/07/2022 contaba con 24347 artículos.
 
+Un usuario debe ingresar al Kibana Service, en el índice llamado jobs, creara un documento de la siguiente forma:
+
+```text
+{
+    "jobId": "{alfanumérico}",
+    "pageSize": "{número}",
+    "sleep": "{número en milisegundos para dormir entre cada request"}
+}
+```
+
 ## Instrucciones para Ejecutarlo
 
 ## Resultados de Pruebas Unitarias
@@ -56,12 +66,12 @@ En esta matriz explica como los integrantes del equipo se relacionaron en el des
 
 |  Implementación             | David | Black | Johnny | Jurgenn |
 |-----------------------------|:-----:|------:|-------:|--------:|
-|Controller (5%)              |   n   |   n   |   n    |   n     |
+|Controller (5%)              |   Y   |   n   |   n    |   n     |
 |API Spider (20%)             |   n   |   n   |   n    |   n     |
 |Scala Spark Processor (20%)  |   n   |   n   |   n    |   n     |
 |Elasticsearch/Kibana (5%)    |   n   |   n   |   n    |   n     |
 |MySQL (5%)                   |   n   |   n   |   n    |   n     |
-|Kafka (5%)                   |   n   |   n   |   n    |   n     |
+|Kafka (5%)                   |   Y   |   n   |   n    |   n     |
 |Servicios (5%)               |   n   |   n   |   n    |   n     |
 |Spacy Entity Extractor (10%) |   n   |   n   |   n    |   n     |
 |MySQL Publisher (5%)         |   n   |   n   |   n    |   n     |
