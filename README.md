@@ -42,13 +42,70 @@ El proyecto *bioRxiv Search* pretende implementar dos motores de búsqueda de ar
 
 Un usuario debe ingresar al Kibana Service, en el índice llamado jobs, creara un documento de la siguiente forma:
 
-```text
+```
 {
     "jobId": "{alfanumérico}",
     "pageSize": "{número}",
-    "sleep": "{número en milisegundos para dormir entre cada request"}
+    "sleep": "{número en milisegundos para dormir entre cada request}"
 }
 ```
+
+El Controller, debe estar continuamente revisando el índice, en el momento que detecta un cambio en el documento, hace un llamado al API bioRxiv (el repositorio que solo tiene las descripciones de los articulos ) y captura el valor llamado **messages.total**, con este se generan varios *splits* (que son una porción de los articulos que deben ser descargados). La cantidad de *splits* se consigue con la división **messages.total**/**pageSize**, por cada *split* se publica un mensage en una cola de kafka con el siguiente formato:
+
+```
+{
+    "jobId": "{alfanumérico}",
+    "pageSize": "{número}",
+    "sleep": "{número en milisegundos para dormir entre cada request}",
+    "splitNumber": "{número de split}"
+}
+```
+
+Estos mensages son leídos por el API Spider, descarga los archivos del API bioRxiv y los almacena en un disco, que se comparte entre varios componentes, y publica en otra cola de kafka un mesage con el siguiente formato:
+
+```
+{
+    "jobId": "{alfanumérico}",
+    "pageSize": "{número}",
+    "sleep": "{número en milisegundos para dormir entre cada request}",
+    "splitNumber": "{número de split}",
+    "status": "DOWNLOADED"
+}
+```
+
+Scala Spark Processor debe leer estos mensajes y, utilizando SparkSQL, aplica las siguientes transformaciones:
+
+- *author_name* -> Apellido, Nombre
+- *author_inst* -> deberá separarse en sus componentes
+- *category* -> cada primera letra va en mayuscula y remueve espacios en blanco
+
+- *rel_date* -> pasa al formato dd/mm/yyyy
+
+La transformación se debe guardar en el disco compartido y se debe publicar el siguiente mensaje en una cola de Kafka:
+
+```
+{
+    "jobId": "{alfanumérico}",
+    "pageSize": "{número}",
+    "sleep": "{número en milisegundos para dormir entre cada request}",
+    "splitNumber": "{número de split}",
+    "status": "PROCESSED"
+}
+```
+
+Spacy Entity Extractor debe leer estos mensages y, utilizando la funcionalidad de Spacy para realizar **Named Entity Recognition**, las volvera entidades y las almacenarán en un nuevo campo de tipo array llamado *entities*. Los documentos se guardaran en el disco compartido y se dos colas de Kafka ( una para Elasticsearch y una para mysql ) con el siguiente formato:
+
+```
+{
+    "jobId": "{alfanumérico}",
+    "pageSize": "{número}",
+    "sleep": "{número en milisegundos para dormir entre cada request}",
+    "splitNumber": "{número de split}",
+    "status": "AUGMENTED"
+}
+```
+
+Elasticsearch Publisher y MySQL Publisher leerán estos mensages y publicará los docuentos en MySQL y Elasticsearch. El usuario podra consultarlos mediante Kibana o MySQL Worbench.
 
 ## Instrucciones para Ejecutarlo
 
