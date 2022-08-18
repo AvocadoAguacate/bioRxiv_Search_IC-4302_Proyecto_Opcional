@@ -8,7 +8,7 @@
 ## Integrantes
 
     David Jose Espinoza Soto - 2016012024
-    Black
+    Esteban Guzmán Ramírez  - 2015095861
     Johnny Díaz
     Jurgenn
 
@@ -121,12 +121,12 @@ En esta matriz explica como los integrantes del equipo se relacionaron en el des
 - **S** ) significa que brindo apoyo a la **sección**.
 - **Y** ) significa que estubo implecado en la **sección**.
 
-|  Implementación             | David | Black | Johnny | Jurgenn |
+|  Implementación             | David | Esteban | Johnny | Jurgenn |
 |-----------------------------|:-----:|------:|-------:|--------:|
 |Controller (5%)              |   Y   |   n   |   n    |   n     |
 |API Spider (20%)             |   n   |   n   |   n    |   n     |
 |Scala Spark Processor (20%)  |   n   |   n   |   n    |   n     |
-|Elasticsearch/Kibana (5%)    |   n   |   n   |   n    |   n     |
+|Elasticsearch/Kibana (5%)    |   n   |   Y   |   n    |   n     |
 |MySQL (5%)                   |   n   |   n   |   n    |   n     |
 |Kafka (5%)                   |   Y   |   n   |   n    |   n     |
 |Servicios (5%)               |   n   |   n   |   n    |   n     |
