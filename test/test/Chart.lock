@@ -1,0 +1,15 @@
+dependencies:
+- name: kafka
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.0.8
+- name: eck-operator
+  repository: https://helm.elastic.co
+  version: 2.3.0
+- name: mysql
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.2.6
+- name: spark
+  repository: https://charts.bitnami.com/bitnami
+  version: 6.2.4
+digest: sha256:274b136d72f9e626166654d24239b7a4e12ee7907f2f12cc1c99e3ac603eae77
+generated: "2022-08-17T19:43:32.696822-06:00"
