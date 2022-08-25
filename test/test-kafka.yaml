@@ -1,0 +1,48 @@
+verision: v1
+kind: Pod
+spec:
+  version: 18.0.8
+  nodeSets:
+  - name: kafka
+    count: 1
+    podTemplate:
+      spec:
+        containers:
+        - name: kafka
+          image: 'bitnami/kafka:18.0.8'
+          ports:
+          - '9092:9092'
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 8
+            limits:
+              memory: 4Gi
+
+  services:
+    zookeeper:
+      image: 'bitnami/zookeeper:latest'
+      ports:
+        - '2181:2181'
+      environment:
+        - ALLOW_ANONYMOUS_LOGIN=yes
+
+  environment:
+  - KAFKA_BROKER_ID=1
+  - KAFKA_LISTENERS=PLAINTEXT://:9092
+  - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+  - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+  - ALLOW_PLAINTEXT_LISTENER=yes
+
+  volumes:
+  - /Users/david/Documents/kafkalocal/kafkastorage
+
+  depends_on:
+  - zookeeper
+
+livenessProbe:
+  exec:
+    command:
+    - "./kafka-topics.sh 
+    --create --topic test-topic -zookeeper localhost:2181
+    --replication-factor 1 --partition 2"
